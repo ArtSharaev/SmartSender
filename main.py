@@ -1,37 +1,23 @@
 import logging
-from aiogram import Bot, types
+from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-from aiogram.types import ReplyKeyboardRemove, \
-    ReplyKeyboardMarkup, KeyboardButton, \
-    InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
 
 from config.config import TOKEN
 
-logging.basicConfig(filename='telegram_bot.log',
-                    filemode='w',
-                    format='%(asctime)s - %(name)s -'
-                           '%(levelname)s - %(message)s',
-                    level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, storage=MemoryStorage())
+logging.basicConfig(format=u'%(filename)+13s [ LINE:%(lineno)-4s]'
+                           u' %(levelname)-8s [%(asctime)s] %(message)s',
+                    level=logging.DEBUG,
+                    filename='tgbot.log',
+                    filemode='w')
+dp.middleware.setup(LoggingMiddleware())
 
-
-@dp.message_handler(commands=['start'])
-async def process_start_command(msg: types.Message):
-    await bot.send_message(msg.from_user.id,
-                           "Привет от разработчиков!\n\nЗаполните анкету,"
-                           " чтобы получить доступ к функционалу.",
-                           reply_markup=start_anket_kb)
-
-
-@dp.message_handler()
-async def echo_message(msg: types.Message):
-    await bot.send_message(msg.from_user.id, msg.text)
+from conversations.profile_conversation import *
 
 
 if __name__ == '__main__':
-    start_anket_kb = ReplyKeyboardMarkup()
-    start_anket_kb.add(KeyboardButton('СОЗДАТЬ АНКЕТУ'))
-    executor.start_polling(dp)
+    executor.start_polling(dp, on_shutdown=shutdown)

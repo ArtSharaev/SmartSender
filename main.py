@@ -19,5 +19,9 @@ dp.middleware.setup(LoggingMiddleware())
 from conversations.profile.handlers import *
 
 
-if __name__ == '__main__':
+async def shutdown(dispatcher: Dispatcher):
+    await dispatcher.storage.close()
+    await dispatcher.storage.wait_closed()
+
+if __name__ == '__main__':  # press F
     executor.start_polling(dp, on_shutdown=shutdown)

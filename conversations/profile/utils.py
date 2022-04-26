@@ -9,6 +9,7 @@ class ProfileStates(Helper):
     GET_GENDER = ListItem()
     GET_AGE = ListItem()
     GET_POSITION = ListItem()
+    GET_POSITION2 = ListItem()
 
 
 if __name__ == '__main__':

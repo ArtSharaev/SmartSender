@@ -16,7 +16,7 @@ logging.basicConfig(format=u'%(filename)+13s [ LINE:%(lineno)-4s]'
                     filemode='w')
 dp.middleware.setup(LoggingMiddleware())
 
-from conversations.profile_conversation import *
+from conversations.profile.handlers import *
 
 
 if __name__ == '__main__':

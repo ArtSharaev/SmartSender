@@ -20,6 +20,8 @@ from conversations.ask_admin.handlers import *
 
 from conversations.profile.handlers import *
 
+from conversations.mode_selection.handlers import *
+
 
 async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()

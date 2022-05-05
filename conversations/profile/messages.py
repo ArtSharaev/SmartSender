@@ -5,9 +5,9 @@ greeting = "Привет от разработчиков!\n\nЗаполните 
 askname = "Введите своё настоящее имя:"
 asksurname = "Введите свою настоящую фамилию:"
 askgender = "Выберите ваш пол:"
-askposition = "Кто вы по отношению к школе? Выберите из предложенного:"
+askposition = "Кто вы по отношению к школе?\nВыберите из предложенного:"
 inputerror = "Ошибка ввода. Попробуйте еще раз."
-stop = "Успех! А тут пока заглушка)"
+passed = "Успех! А тут пока заглушка)"
 
 MESSAGES = {
     "greeting": greeting,
@@ -15,6 +15,6 @@ MESSAGES = {
     "asksurname": asksurname,
     "askgender": askgender,
     "askposition": askposition,
-    "pass": stop,
+    "passed":passed,
     "inputerror": inputerror,
 }

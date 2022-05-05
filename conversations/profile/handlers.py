@@ -54,8 +54,6 @@ async def ask_age(message: types.Message):
     else:
         await message.reply('Введите ваш возраст:', reply=False,
                             reply_markup=empty_markup)
-        n = await state.get_data()
-        print(n)
         await state.set_state(ProfileStates.all()[3])
 
 
@@ -83,5 +81,7 @@ async def ask_position2(message: types.Message):
     if message.text != "Родитель" and message.text != "Ученик" and message.text != "Учитель":
         await message.reply(MESSAGES['inputerror'])
     else:
-        await message.reply(MESSAGES['pass'], reply=False,
+        d = await state.get_data()
+        await message.reply(d, reply=False,
                             reply_markup=empty_markup)
+        await state.finish()

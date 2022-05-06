@@ -7,7 +7,7 @@ admin_greeting = "Поздравляем, теперь Вы админ!\n" \
 admin_negate = "Вы отклонили предложение."
 
 MESSAGES = {
-    "ask_admin": ask_admin,
+    "give_admin": ask_admin,
     "ask_user": ask_user,
     "admin_greeting": admin_greeting,
     "admin_negate": admin_negate,

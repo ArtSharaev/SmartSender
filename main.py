@@ -16,16 +16,24 @@ logging.basicConfig(format=u'%(filename)+13s [ LINE:%(lineno)-4s]'
                     filemode='w')
 dp.middleware.setup(LoggingMiddleware())
 
-from conversations.ask_admin.handlers import *
+from conversations.give_admin.handlers import *
 
 from conversations.profile.handlers import *
 
 from conversations.mode_selection.handlers import *
 
+from conversations.take_away_admin.handlers import *
+
 
 async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
+
+
+@dp.message_handler()
+async def echo(msg: types.Message):
+    print(f"Получено сообщение '{msg.text}' от пользователя {msg.from_user.id}")
+
 
 if __name__ == '__main__':  # press F
     executor.start_polling(dp, on_shutdown=shutdown)

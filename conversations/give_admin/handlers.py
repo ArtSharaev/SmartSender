@@ -2,9 +2,9 @@
 
 from aiogram import types
 
-from conversations.ask_admin.utils import AskAdminStates
-from conversations.ask_admin.messages import MESSAGES
-from conversations.ask_admin.keyboards import ask_admin_markup, empty_markup
+from conversations.give_admin.utils import GiveAdminStates
+from conversations.give_admin.messages import MESSAGES
+from conversations.give_admin.keyboards import ask_admin_markup, empty_markup
 
 from main import dp, bot
 
@@ -14,14 +14,14 @@ async def giveadmin_command(message: types.Message):
     if message.from_user.id == 5023078965:
         await bot.send_message(message.from_user.id, MESSAGES['ask_user'],
                                reply_markup=empty_markup)
-    state = dp.current_state(user=message.from_user.id)
-    await state.set_state(AskAdminStates.all()[0])
+        state = dp.current_state(user=message.from_user.id)
+        await state.set_state(GiveAdminStates.all()[0])
 
 
-@dp.message_handler(state=AskAdminStates.GIVE_ADMIN)
+@dp.message_handler(state=GiveAdminStates.GIVE_ADMIN)
 async def ask_admin(message: types.Message):
     if message.from_user.id == 5023078965:
-        await bot.send_message(int(message.text), MESSAGES['ask_admin'],
+        await bot.send_message(int(message.text), MESSAGES['give_admin'],
                                reply_markup=ask_admin_markup)
     state = dp.current_state(user=message.from_user.id)
     await state.finish()
@@ -41,9 +41,4 @@ async def pressed_no(callback_query: types.CallbackQuery):
                                 show_alert=True)
     await bot.delete_message(chat_id=callback_query.from_user.id,
                              message_id=callback_query.message.message_id)
-
-
-@dp.message_handler()
-async def echo(msg: types.Message):
-    print(f"Получено сообщение '{msg.text}' от пользователя {msg.from_user.id}")
 

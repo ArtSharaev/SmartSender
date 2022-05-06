@@ -10,7 +10,7 @@ from main import dp, bot
 
 
 @dp.message_handler(commands=['giveadmin'])
-async def give_admin(message: types.Message):
+async def giveadmin_command(message: types.Message):
     if message.from_user.id == 5023078965:
         await bot.send_message(message.from_user.id, MESSAGES['ask_user'],
                                reply_markup=empty_markup)
@@ -44,6 +44,6 @@ async def pressed_no(callback_query: types.CallbackQuery):
 
 
 @dp.message_handler()
-async def get_id(msg: types.Message):
-    print(msg.from_user.id)
+async def echo(msg: types.Message):
+    print(f"Получено сообщение '{msg.text}' от пользователя {msg.from_user.id}")
 

@@ -22,7 +22,6 @@ async def start_command(message: types.Message):
 async def ask_name(message: types.Message):
     await message.reply(MESSAGES['askname'], reply=False,
                         reply_markup=empty_markup)
-    print(ProfileStates.all())
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(ProfileStates.all()[5])
 

@@ -5,7 +5,9 @@ from aiogram.utils import executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 
+from data import db_session
 from config.config import TOKEN
+
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -36,4 +38,5 @@ async def echo(msg: types.Message):
 
 
 if __name__ == '__main__':  # press F
+    db_session.global_init("db/SmartSender.db")
     executor.start_polling(dp, on_shutdown=shutdown)

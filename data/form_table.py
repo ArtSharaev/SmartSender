@@ -1,3 +1,6 @@
+"""status: 0 - на модерации, 1 - отклонена, 2 - верифицирована"""
+
+
 import datetime
 import sqlalchemy
 from sqlalchemy import orm
@@ -9,6 +12,7 @@ class Form(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
+    from_tg_user_id = sqlalchemy.Column(sqlalchemy.Integer)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     name = sqlalchemy.Column(sqlalchemy.String)

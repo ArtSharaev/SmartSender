@@ -7,7 +7,7 @@ class User(SqlAlchemyBase):
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
-    privilege_level = sqlalchemy.Column(sqlalchemy.Integer)
+    privilege_level = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     name = sqlalchemy.Column(sqlalchemy.String)
     surname = sqlalchemy.Column(sqlalchemy.String)
     gender = sqlalchemy.Column(sqlalchemy.String)

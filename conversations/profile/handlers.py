@@ -9,6 +9,11 @@ from conversations.profile.messages import MESSAGES
 
 from main import dp
 
+from data import db_session
+from data.form_table import Form
+
+import  datetime as dt
+
 
 @dp.message_handler(commands=['start'])
 async def start_command(message: types.Message):
@@ -81,6 +86,19 @@ async def ask_position2(message: types.Message):
         await message.reply(MESSAGES['inputerror'])
     else:
         d = await state.get_data()
-        await message.reply(d, reply=False,
+        form = Form()
+        form.from_tg_user_id = message.from_user.id
+        form.created_date = dt.datetime.now()
+        form.name = d["name"]
+        form.surname = d["surname"]
+        form.gender = d["gender"]
+        form.age = d["age"]
+        form.position = d["position"]
+        form.status = 0
+        form.changed_date = dt.datetime.now()
+        db_sess = db_session.create_session()
+        db_sess.add(form)
+        db_sess.commit()
+        await message.reply("Ваша анкета отправлена на модерацию!", reply=False,
                             reply_markup=empty_markup)
         await state.finish()

@@ -22,8 +22,6 @@ from conversations.give_admin.handlers import *
 
 from conversations.profile.handlers import *
 
-from conversations.mode_selection.handlers import *
-
 from conversations.take_away_admin.handlers import *
 
 from conversations.admin.handlers import *

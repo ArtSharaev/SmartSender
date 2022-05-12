@@ -1,20 +1,18 @@
 """Машина состояний для работы админа"""
 
 from aiogram import types
-
 import datetime as dt
+
 from conversations.admin.keyboards import form_markup, start_markup,\
     empty_markup
 from conversations.admin.utils import AdminStates
 from conversations.admin.messages import MESSAGES
 
-from conversations.profile.utils import ProfileStates
-
-from main import dp, bot
-
 from data import db_session
 from data.form_table import Form
 from data.users_table import User
+
+from main import dp, bot
 
 
 @dp.message_handler(commands=['getform'])

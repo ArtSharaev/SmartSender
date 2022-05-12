@@ -11,16 +11,25 @@ from main import dp
 
 from data import db_session
 from data.form_table import Form
+from data.users_table import User
 
 import datetime as dt
 
 
+def check_not_user(user_id):
+    db_sess = db_session.create_session()
+    if db_sess.query(User).filter(User.id == user_id).first():
+        return False
+    return True
+
+
 @dp.message_handler(commands=['start'])
 async def start_command(message: types.Message):
-    await message.reply(MESSAGES['greeting'],
-                        reply_markup=start_markup, reply=False)
-    state = dp.current_state(user=message.from_user.id)
-    await state.set_state(ProfileStates.all()[2])
+    if check_not_user(message.from_user.id):
+        await message.reply(MESSAGES['greeting'],
+                            reply_markup=start_markup, reply=False)
+        state = dp.current_state(user=message.from_user.id)
+        await state.set_state(ProfileStates.all()[2])
 
 
 @dp.message_handler(state=ProfileStates.GET_NAME)

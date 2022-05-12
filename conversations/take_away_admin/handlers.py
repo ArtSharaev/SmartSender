@@ -4,6 +4,7 @@ from aiogram import types
 
 from conversations.take_away_admin.utils import TakeAwayAdminStates
 from conversations.take_away_admin.messages import MESSAGES
+from conversations.user.keyboards import user_markup
 
 from data import db_session
 from data.users_table import User
@@ -38,7 +39,8 @@ async def notify_user(message: types.Message):
     user.privilege_level = 0
     db_sess.commit()
     await bot.send_message(d["user_id"],
-                           f"{MESSAGES['take_away_notify']} {message.text}")
+                           f"{MESSAGES['take_away_notify']} {message.text}",
+                           reply_markup=user_markup)
     await bot.send_message(5023078965,
                            f"{MESSAGES['ok_message']} {d['user_id']}")
     await state.finish()

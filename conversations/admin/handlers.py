@@ -7,6 +7,8 @@ from conversations.admin.keyboards import form_markup, start_markup,\
     empty_markup
 from conversations.admin.utils import AdminStates
 from conversations.admin.messages import MESSAGES
+from conversations.admin.keyboards import admin_markup
+from conversations.user.keyboards import user_markup
 
 from data import db_session
 from data.form_table import Form
@@ -72,8 +74,11 @@ async def form_accepted(callback_query: types.CallbackQuery):
     user.form_id = form.id
     db_sess.add(user)
     db_sess.commit()
-    await bot.send_message(d["from_user_id"], MESSAGES["was_accepted"],
-                           reply_markup=empty_markup)
+    await bot.send_message(callback_query.from_user.id,
+                           MESSAGES["was_accepted"],
+                           reply_markup=admin_markup)
+    await bot.send_message(d["from_user_id"], MESSAGES["accepted_message"],
+                           reply_markup=user_markup)
     await state.finish()
 
 
@@ -101,8 +106,11 @@ async def send_rejected(message: types.Message):
     form.moderator_id = message.from_user.id
     form.changed_date = dt.datetime.now()
     db_sess.commit()
+    await bot.send_message(message.from_user.id,
+                           MESSAGES["was_rejected"],
+                           reply_markup=admin_markup)
     await bot.send_message(from_user_id,
-                           MESSAGES["was_rejected"] +
+                           MESSAGES["rejected_message"] +
                            message.text + MESSAGES["enter_start"],
                            reply_markup=start_markup)
     await state.finish()

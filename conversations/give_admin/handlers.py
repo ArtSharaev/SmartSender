@@ -4,7 +4,7 @@ from aiogram import types
 
 from conversations.give_admin.utils import GiveAdminStates
 from conversations.give_admin.messages import MESSAGES
-from conversations.give_admin.keyboards import ask_admin_markup, empty_markup
+from conversations.give_admin.keyboards import ask_admin_markup
 from conversations.admin.keyboards import admin_markup
 from conversations.user.keyboards import user_markup
 
@@ -18,7 +18,7 @@ from main import dp, bot
 async def giveadmin_command(message: types.Message):
     if message.from_user.id == 5023078965:
         await bot.send_message(message.from_user.id, MESSAGES['ask_user'],
-                               reply_markup=empty_markup)
+                               reply_markup=admin_markup)
         state = dp.current_state(user=message.from_user.id)
         await state.set_state(GiveAdminStates.all()[0])
 
@@ -46,7 +46,7 @@ async def pressed_yes(callback_query: types.CallbackQuery):
     db_sess.commit()
     await bot.send_message(5023078965, f"{MESSAGES['greeting_notify']}"
                                        f" {str(callback_query.from_user.id)}",
-                           reply_markup=empty_markup)
+                           reply_markup=admin_markup)
 
 
 @dp.callback_query_handler(text='no_pressed')
@@ -59,5 +59,5 @@ async def pressed_no(callback_query: types.CallbackQuery):
                            reply_markup=user_markup)
     await bot.send_message(5023078965, f"{MESSAGES['negate_notify']}"
                                        f" {str(callback_query.from_user.id)}",
-                           reply_markup=empty_markup)
+                           reply_markup=admin_markup)
 

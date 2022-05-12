@@ -7,13 +7,19 @@ from conversations.user.messages import MESSAGES
 from conversations.user.keyboards import user_markup, empty_markup
 from conversations.admin.keyboards import admin_markup
 from conversations.profile.keyboards import position_markup
-from conversations.profile.handlers import check_user
 
 from main import dp, bot
 
 from data import db_session
 from data.form_table import Form
 from data.users_table import User
+
+
+def check_user(user_id):
+    db_sess = db_session.create_session()
+    if db_sess.query(User).filter(User.id == user_id).first():
+        return True
+    return False
 
 
 @dp.message_handler(commands=['send'])
@@ -53,8 +59,7 @@ async def get_recipient(message: types.Message):
         count += 1
         await bot.send_message(
             user.id,
-            f"Сообщение от {name} {surname}, {position.lower()}:\n {message.text}",
-            reply_markup=empty_markup)
+            f"Сообщение от {name} {surname}, {position.lower()}:\n {message.text}")
     if you.privilege_level == 0:
         await bot.send_message(
             message.from_user.id,

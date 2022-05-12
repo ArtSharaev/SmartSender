@@ -6,6 +6,8 @@ from conversations.profile.utils import ProfileStates
 from conversations.profile.keyboards import gender_markup, empty_markup, \
     start_markup, position_markup
 from conversations.profile.messages import MESSAGES
+from conversations.user.keyboards import user_markup
+from conversations.admin.keyboards import admin_markup
 
 from main import dp
 
@@ -16,20 +18,32 @@ from data.users_table import User
 import datetime as dt
 
 
-def check_user(user_id):
+def check_not_user(user_id):
     db_sess = db_session.create_session()
-    if db_sess.query(User).filter(User.id == user_id).first():
-        return True
-    return False
+    forms = db_sess.query(Form).all()
+    for form in forms:
+        if form.from_tg_user_id == user_id and form.status == 2:
+            return False
+    return True
 
 
 @dp.message_handler(commands=['start'])
 async def start_command(message: types.Message):
-    if not check_user(message.from_user.id):
+    if check_not_user(message.from_user.id):
         await message.reply(MESSAGES['greeting'],
                             reply_markup=start_markup, reply=False)
         state = dp.current_state(user=message.from_user.id)
         await state.set_state(ProfileStates.all()[2])
+    else:
+        db_sess = db_session.create_session()
+        you = db_sess.query(User).filter(
+            User.id == message.from_user.id).first()
+        if you.privilege_level == 0:
+            await message.reply(MESSAGES['have_form'],
+                                reply_markup=user_markup, reply=False)
+        else:
+            await message.reply(MESSAGES['have_form'],
+                                reply_markup=admin_markup, reply=False)
 
 
 @dp.message_handler(state=ProfileStates.GET_NAME)

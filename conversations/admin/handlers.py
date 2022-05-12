@@ -48,7 +48,7 @@ async def getform_command(message: types.Message):
                                    reply_markup=form_markup)
         else:
             await bot.send_message(message.from_user.id, MESSAGES["no_forms"],
-                                   reply_markup=empty_markup)
+                                   reply_markup=admin_markup)
 
 
 @dp.callback_query_handler(text='accept_form')

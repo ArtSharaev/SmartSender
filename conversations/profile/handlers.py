@@ -16,16 +16,16 @@ from data.users_table import User
 import datetime as dt
 
 
-def check_not_user(user_id):
+def check_user(user_id):
     db_sess = db_session.create_session()
     if db_sess.query(User).filter(User.id == user_id).first():
-        return False
-    return True
+        return True
+    return False
 
 
 @dp.message_handler(commands=['start'])
 async def start_command(message: types.Message):
-    if check_not_user(message.from_user.id):
+    if not check_user(message.from_user.id):
         await message.reply(MESSAGES['greeting'],
                             reply_markup=start_markup, reply=False)
         state = dp.current_state(user=message.from_user.id)

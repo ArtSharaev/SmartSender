@@ -26,15 +26,12 @@ from conversations.take_away_admin.handlers import *
 
 from conversations.admin.handlers import *
 
+from conversations.user.handlers import *
+
 
 async def shutdown(dispatcher: Dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
-
-
-# @dp.message_handler()
-# async def echo(msg: types.Message):
-#     print(f"Получено сообщение '{msg.text}' от пользователя {msg.from_user.id}")
 
 
 if __name__ == '__main__':  # press F

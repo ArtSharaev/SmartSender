@@ -15,12 +15,20 @@ from data.users_table import User
 from main import dp, bot
 
 
+def check_admin(user_id):
+    db_sess = db_session.create_session()
+    for user in db_sess.query(User).filter(User.privilege_level == 1).all():
+        if user_id == user.id:
+            return True
+    return False
+
+
 @dp.message_handler(commands=['getform'])
 async def getform_command(message: types.Message):
     db_sess = db_session.create_session()
-    if ((message.from_user.id == 5023078965) or
-            (message.from_user.id in db_sess.query(User).filter(
-                User.privilege_level == 1))):
+    print(db_sess.query(User).filter(User.privilege_level == 1).all())
+    if (message.from_user.id == 5023078965 or
+            check_admin(message.from_user.id)):
         form = db_sess.query(Form).filter(Form.status == 0).first()
         if form:
             msg = f"""
@@ -84,21 +92,18 @@ async def form_rejected(callback_query: types.CallbackQuery):
 async def send_rejected(message: types.Message):
     db_sess = db_session.create_session()
     state = dp.current_state(user=message.from_user.id)
-    if ((message.from_user.id == 5023078965) or
-            (message.from_user.id in db_sess.query(User).filter(
-                User.privilege_level == 1))):
-        d = await state.get_data()
-        print(d["from_user_id"])
-        from_user_id = d["from_user_id"]
-        form_id = d["form_id"]
-        form = db_sess.query(Form).filter(Form.id == form_id).first()
-        form.status = 1
-        form.moderator_id = message.from_user.id
-        form.changed_date = dt.datetime.now()
-        db_sess.commit()
-        await bot.send_message(from_user_id,
-                               MESSAGES["was_rejected"] +
-                               message.text + MESSAGES["enter_start"],
-                               reply_markup=start_markup)
+    d = await state.get_data()
+    print(d["from_user_id"])
+    from_user_id = d["from_user_id"]
+    form_id = d["form_id"]
+    form = db_sess.query(Form).filter(Form.id == form_id).first()
+    form.status = 1
+    form.moderator_id = message.from_user.id
+    form.changed_date = dt.datetime.now()
+    db_sess.commit()
+    await bot.send_message(from_user_id,
+                           MESSAGES["was_rejected"] +
+                           message.text + MESSAGES["enter_start"],
+                           reply_markup=start_markup)
     await state.finish()
 
